@@ -15,12 +15,6 @@ from skimage import color
 from multiprocessing import Pool, cpu_count
 from functools import partial
 
-FFMPEG_BIN = "ffmpeg"
-FFPROBE_BIN = "ffprobe"
-
-# VID_DIR = "/media/neil/Neil's 5TB HDD/deep-motion_data/youtube-8m-videos"     # HDD too slow -_-
-VID_DIR = "/media/neil/Neil's 240GB SSD/deep-motion_data/youtube-8m-videos"
-
 KITTI_VID_DIR = "/media/neil/Neil's 240GB SSD/deep-motion_data/KITTI_RAW/train/"
 
 FRAME_DISTS = [3, 5, 7, 9]
@@ -219,8 +213,8 @@ def kitti_batch_generator(batch_size, frame_dists=(2, 4, 6), data_aug=True):
             im_list.append(im)
 
     while 1:
-        X = np.zeros(shape=(batch_size, 128, 384, 6), dtype="uint8")
-        y = np.zeros(shape=(batch_size, 128, 384, 3), dtype="uint8")
+        X = np.zeros(shape=(batch_size, 144, 144, 6), dtype="uint8")
+        y = np.zeros(shape=(batch_size, 144, 144, 3), dtype="uint8")
         for batch_i in range(batch_size):
             random.seed()
             im_path = random.choice(im_list)
@@ -245,65 +239,6 @@ def kitti_batch_generator(batch_size, frame_dists=(2, 4, 6), data_aug=True):
 
 
 def main():
-    # TODO should clean this up? Meant for debugging...
-    # X, y = kitti_batch_generator(500).next()
-    # np.save("X_val_KITTI.npy", X)
-    # np.save("y_val_KITTI.npy", y)
-
-
-    # total = 95403
-    # count = 0
-    # im_list = []
-    # for path, subdirs, files in os.walk(KITTI_VID_DIR):
-    #     for name in files:
-    #         fn = os.path.join(path, name)
-    #         if fn.endswith(".png"):
-    #             im_list.append(fn[len(KITTI_VID_DIR):])
-    #             # im = imread(fn)
-    #             # print im.shape
-    #             # if not (im.shape[1] * 128.0) / im.shape[0] >= 423 and (im.shape[1] * 128.0) / im.shape[0] <= 425:
-    #             # if im.shape != (128, 424, 3):
-    #             #     print "FAIL", fn
-    #                 # continue
-    #             # imsave(fn, imresize(im, (128, 424)))
-    #             # print count
-    #             count += 1
-    # print '\n'.join(im_list)
-    # exit()
-
-    # raw_input("go")
-    # core = 6
-    # im_i = 1
-    # # for im_fn in im_list[core*11926:(core+1)*11926]:
-    # for im_fn in im_list[core*11926+5000:(core+1)*11926]:
-    #     im = imread(im_fn)
-    #     if im.shape != (128, 424, 3):
-    #         print "HERE"
-    #         imsave(im_fn, imresize(im, (128, 424)))
-    #     print im_i, "images done"
-    #     im_i += 1
-
-    # files = os.listdir(".")
-    #
-    # X = np.zeros(shape=(120000, 6, 36, 64), dtype="uint8")
-    # y = np.zeros(shape=(120000, 3, 36, 64), dtype="uint8")
-    # j = 0
-    # for i in range(len(files)):
-    #     if files[i].startswith("X_CORE"):
-    #
-    #         X[j*100:(j+1)*100] = np.load(files[i]).astype("uint8")
-    #         y[j*100:(j+1)*100] = np.load("y"+files[i][1:]).astype("uint8")
-    #         j += 1
-    #
-    # from sklearn.utils import shuffle
-    # (X, y) = shuffle(X, y)
-    #
-    # np.save("X_small_train", X[:100000])
-    # np.save("y_small_train", y[:100000])
-    # np.save("X_small_val", X[100000:110000])
-    # np.save("y_small_val", y[100000:110000])
-    # np.save("X_small_test", X[110000:120000])
-    # np.save("y_small_test", y[110000:120000])
 
     start_time = time.time()
     i = 0
